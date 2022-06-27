@@ -28,6 +28,45 @@ docker run -a busybox echo "Hello World"
 
 ​
 
+1. ps설치
+apt-get update && apt-get install procps
+2. vi 설치
+# apt-get update
+# apt-get install vim
+# apt-get install wget
+# apt-get install net-tools
+# apt-get install iputils-ping
+
+<ssh>
+sudo apt-get install ssh
+sudo systemctl ssh start
+sudo systemctl ssh enable
+service ssh status
+ 
+vi /etc/ssh/sshd_config
+PermitRootLogin을 찾아 주석을 해제하고 yes로 변경
+service ssh start
+
+3.
+dorcker run 
+
+
+4.
+docker exec -it tomcat /bin/bash
+docker images
+docker stop id
+docker start 
+docker run -d 이미지 --name 이름 -p 포트번호 
+docker cp ~/data/test.md tmp_container:/root/data/
+
+5. gradle
+docker run -u root -v "$PWD":/home/gradle/project -w /home/gradle/project gradle
+
+6. Jenkins
+docker run -itd -p 8085:8080 -v /jenkins:/var/jenkins_home --name jenkins -u root jenkins/jenkins
+
+
+
 ※ 도커 소프트웨어의 개요 ※
 
 도커는 크게 ① 오픈소스 무료 버전(Community Edition), ② 유료 버전(Enterprise Edition)으로 나뉩니다.
