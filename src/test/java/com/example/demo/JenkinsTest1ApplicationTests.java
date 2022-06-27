@@ -8,6 +8,8 @@ class JenkinsTest1ApplicationTests {
 
 	@Test
 	void contextLoads() {
+		
+		System.out.println("Server running..");
 	}
 
 }
