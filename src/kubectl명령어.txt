@@ -1,195 +1,316 @@
+kubectl ë°”ì´ë„ˆë¦¬ ì„¤ì¹˜
+curl -LO "https://dl.k8s.io/release/v1.24.0/bin/windows/amd64/kubectl.exe"
+ëŒ€ì‹œë³´ë“œ ì‹¤í–‰
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml
+kubectl proxy
+http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/
+í† í° ë°œí–‰
+kubectl -n kubernetes-dashboard create token admin-user
+kubectl -n default create token admin
+ì‚­ì œ
+kubectl --namespace kube-system delete deployment,service kubernetes-dashboard
+ì„¤ì •ì¡°íšŒ
+kubectl config view
 
+
+<í† í°>
+kubeadm token list
+kubeadm token create
+
+<Role>
+kubectl describe clusterrole kubernetes-dashboard
+
+kubectl describe role kubernetes-dashboard -n kubernetes-dashboard
+
+kubectl get rolebindings,clusterrolebindings --all-namespaces -o custom-columns='KIND:kind,NAMESPACE:metadata.namespace,NAME:metadata.name,SERVICE_ACCOUNTS:subjects[?(@.kind=="ServiceAccount")].name'
+
+
+namespace  í•˜ìœ„ë¦¬ì†ŒìŠ¤ í™•ì¸
+kubectl api-resources --namespaced -o name
 
 <kubectl>
-kubectl.ext get na
+kubectl.exe get na
 kubectl get namespace
 kubectl create namespace dev
-notepad.exe dev.yaml
+notepad.exe dev.yamlkub
 kubectl describe namespace dev
 kubectl apply -f https://k8s.io/examples/admin/resource/quota-mem-cpu.yaml --namespace=quota-mem-cpu-example
 kubectl get resourcequota mem-cpu-demo --namespace=quota-mem-cpu-example --output=yaml
 kubectl get pod quota-mem-cpu-demo --namespace=quota-mem-cpu-example
 kubectl get resourcequota mem-cpu-demo --namespace=quota-mem-cpu-example --output=yaml
 
+kubectl exec -it íŒŒë“œëª… /bin/bash 
 
-<±âº»¸í·É¾î>
-#k8s-node1 ¿öÅ©³ëÆ®¿¡ key=worker ¶ó´Â label Ãß°¡ÇØº¸±â
+<ê¸°ë³¸ëª…ë ¹ì–´>
+#k8s-node1 ì›Œí¬ë…¸íŠ¸ì— key=worker ë¼ëŠ” label ì¶”ê°€í•´ë³´ê¸°
 kubectl label nodes k8s-node1 key=worker
-k8s-node1  Ready  <none> 22m v1.18.6   .,key=worker,kubernetes.io/ #<-key=worker Ãß°¡È®ÀÎ
+k8s-node1  Ready  <none> 22m v1.18.6   .,key=worker,kubernetes.io/ #<-key=worker ì¶”ê°€í™•ì¸
 
-#k8s-node1 ¿öÅ©³ëÆ®¿¡ label »èÁ¦ÇØº¸±â
+#k8s-node1 ì›Œí¬ë…¸íŠ¸ì— label ì‚­ì œí•´ë³´ê¸°
 kubectl label nodes k8s-node1 key-
 
-#kubectl get nodes --show-labels # Á¶È¸ÇØº¸±â
+#kubectl get nodes --show-labels # ì¡°íšŒí•´ë³´ê¸°
 
-# dev¶ó´Â dev namespace »ı¼ºÇØº¸±â
-kubectl create namespace dev                  # dev ¶ó´Â ³×ÀÓ½ºÆäÀÌ½º »ı¼º
+# devë¼ëŠ” dev namespace ìƒì„±í•´ë³´ê¸°
+kubectl create namespace dev                  # dev ë¼ëŠ” ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ìƒì„±
 
-#dev namespace pod »ı¼ºÇØº¸±â
+#dev namespace pod ìƒì„±í•´ë³´ê¸°
 kubectl apply -f  hello-node.yaml --namespace=dev
 -->NAMESPACE NAME         READY   STATUS     RESTARTS   AGE
    dev       hello-node   1/1     Running    0          5m28s
 
-#dev namespace ÀÖ´Â hello-node pod »èÁ¦ÇØº¸±â 
-kubect delete pod,service hello-node --namespace=dev
+#dev namespace ìˆëŠ” hello-node pod ì‚­ì œí•´ë³´ê¸° 
+kubectl delete pod,service hello-node --namespace=dev
 
-# ±âº» Ãâ·ÂÀ» À§ÇÑ Get Ä¿¸Çµå
-kubectl create namespace dev                  # dev ¶ó´Â ³×ÀÓ½ºÆäÀÌ½º »ı¼º
-kubectl get services                          # ³×ÀÓ½ºÆäÀÌ½º ¸ñ·Ï Á¶È¸
-kubectl get pods --all-namespaces             # ¸ğµç ³×ÀÓ½ºÆäÀÌ½ºÆÄµåÀÇ ¸ñ·Ï Á¶È¸
-kubectl get pods -o wide                      # ³×ÀÓ½ºÆäÀÌ½º ³» ¸ğµç ÆÄµåÀÇ »ó¼¼ ¸ñ·Ï Á¶È¸
-kubectl get deployment my-dep                 # Æ¯Á¤ µğÇÃ·ÎÀÌ¸ÕÆ®ÀÇ ¸ñ·Ï Á¶È¸
-kubectl get pods                              # ³×ÀÓ½ºÆäÀÌ½º ³» ¸ğµç ÆÄµåÀÇ ¸ñ·Ï Á¶È¸
-kubectl get pod my-pod -o yaml                # ÆÄµåÀÇ YAML Á¶È¸
+#í™œì„±í™” ë„¤ì„ìŠ¤í˜ì´ìŠ¤ í™•ì¸
+$ kubectl config view | grep namespace
 
-# »ó¼¼ Ãâ·ÂÀ» À§ÇÑ Describe Ä¿¸Çµå
+# ê¸°ë³¸ ì¶œë ¥ì„ ìœ„í•œ Get ì»¤ë§¨ë“œ
+kubectl create namespace dev                  # dev ë¼ëŠ” ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ìƒì„±
+kubectl get services                          # ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ëª©ë¡ ì¡°íšŒ
+kubectl get pods --all-namespaces             # ëª¨ë“  ë„¤ì„ìŠ¤í˜ì´ìŠ¤íŒŒë“œì˜ ëª©ë¡ ì¡°íšŒ
+kubectl get pods -o wide                      # ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ë‚´ ëª¨ë“  íŒŒë“œì˜ ìƒì„¸ ëª©ë¡ ì¡°íšŒ
+kubectl get deployment my-dep                 # íŠ¹ì • ë””í”Œë¡œì´ë¨¼íŠ¸ì˜ ëª©ë¡ ì¡°íšŒ
+kubectl get pods                              # ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ë‚´ ëª¨ë“  íŒŒë“œì˜ ëª©ë¡ ì¡°íšŒ
+kubectl get pod my-pod -o yaml                # íŒŒë“œì˜ YAML ì¡°íšŒ
+
+<pod>
+1. pod-nginx.yaml íŒŒì¼ì„ ìƒì„±í•´ë´…ë‹ˆë‹¤.
+$vi pod-nginx.yaml
+ì•„ë˜ ë‚´ìš© ì‚½ì…
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx  
+  labels:
+    name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+  - containerPort: 
+    
+    
+2. ì ìš©í•´ë³´ê¸°    
+$ kubectl apply -f pod-nginx.yaml
+pod/nginx created
+or
+$kubectl run íŒŒë“œì´ë¦„ --image=ë„ì»¤ì´ë¯¸ì§€
+
+3. í™•ì¸í•˜ê¸°
+$ kubectl get pod nginx
+NAME    READY   STATUS    RESTARTS   AGE
+nginx   1/1     Running   0          10
+# Pod ì¡°íšŒ
+kubectl get pod
+$ kubectl get pods --all-namespaces
+
+# ì¤„ì„ë§(Shortname)ê³¼ ë³µìˆ˜í˜• ì‚¬ìš©ê°€ëŠ¥
+kubectl get pods
+kubectl get po
+
+# ì—¬ëŸ¬ TYPE ì…ë ¥
+kubectl get pod,service
+#
+kubectl get po,svc
+
+# Pod, ReplicaSet, Deployment, Service, Job ì¡°íšŒ => all
+kubectl get all
+
+# ê²°ê³¼ í¬ë©§ ë³€ê²½
+kubectl get pod -o wide
+kubectl get pod -o yaml
+kubectl get pod -o json
+
+# Label ì¡°íšŒ
+kubectl get pod --show-labels
+
+
+# ìƒì„¸ ì¶œë ¥ì„ ìœ„í•œ Describe ì»¤ë§¨ë“œ
 kubectl describe nodes my-node
 kubectl describe pods my-pod
 
-# NameÀ¸·Î Á¤·ÄµÈ ¼­ºñ½ºÀÇ ¸ñ·Ï Á¶È¸
+# Nameìœ¼ë¡œ ì •ë ¬ëœ ì„œë¹„ìŠ¤ì˜ ëª©ë¡ ì¡°íšŒ
 kubectl get services --sort-by=.metadata.name
 
-# Àç½ÃÀÛ È½¼ö·Î Á¤·ÄµÈ ÆÄµåÀÇ ¸ñ·Ï Á¶È¸
+# ì¬ì‹œì‘ íšŸìˆ˜ë¡œ ì •ë ¬ëœ íŒŒë“œì˜ ëª©ë¡ ì¡°íšŒ
 kubectl get pods --sort-by='.status.containerStatuses[0].restartCount'
 
-# PersistentVolumesÀ» ¿ë·®º°·Î Á¤·ÄÇØ¼­ Á¶È¸
+# PersistentVolumesì„ ìš©ëŸ‰ë³„ë¡œ ì •ë ¬í•´ì„œ ì¡°íšŒ
 kubectl get pv --sort-by=.spec.capacity.storage
 
-# app=cassandra ·¹ÀÌºíÀ» °¡Áø ¸ğµç ÆÄµåÀÇ ·¹ÀÌºí ¹öÀü Á¶È¸
+# app=cassandra ë ˆì´ë¸”ì„ ê°€ì§„ ëª¨ë“  íŒŒë“œì˜ ë ˆì´ë¸” ë²„ì „ ì¡°íšŒ
 kubectl get pods --selector=app=cassandra -o \
   jsonpath='{.items[*].metadata.labels.version}'
 
-# ¸ğµç ¿öÄ¿ ³ëµå Á¶È¸ (¼¿·ºÅÍ¸¦ »ç¿ëÇÏ¿© 'node-role.kubernetes.io/master'
-# À¸·Î ¸í¸íµÈ ¶óº§ÀÇ °á°ú¸¦ Á¦¿Ü)
+# ëª¨ë“  ì›Œì»¤ ë…¸ë“œ ì¡°íšŒ (ì…€ë ‰í„°ë¥¼ ì‚¬ìš©í•˜ì—¬ 'node-role.kubernetes.io/master'
+# ìœ¼ë¡œ ëª…ëª…ëœ ë¼ë²¨ì˜ ê²°ê³¼ë¥¼ ì œì™¸)
 kubectl get node --selector='!node-role.kubernetes.io/master'
 
-# ³×ÀÓ½ºÆäÀÌ½ºÀÇ ¸ğµç ½ÇÇà ÁßÀÎ ÆÄµå¸¦ Á¶È¸
+# ë„¤ì„ìŠ¤í˜ì´ìŠ¤ì˜ ëª¨ë“  ì‹¤í–‰ ì¤‘ì¸ íŒŒë“œë¥¼ ì¡°íšŒ
 kubectl get pods --field-selector=status.phase=Running
 
-# ¸ğµç ³ëµåÀÇ ¿ÜºÎIP¸¦ Á¶È¸
+# ëª¨ë“  ë…¸ë“œì˜ ì™¸ë¶€IPë¥¼ ì¡°íšŒ
 kubectl get nodes -o jsonpath='{.items[*].status.addresses[?(@.type=="ExternalIP")].address}'
 
-# Æ¯Á¤ RC¿¡ ¼ÓÇØÀÖ´Â ÆÄµå ÀÌ¸§ÀÇ ¸ñ·Ï Á¶È¸
-# "jq" Ä¿¸Çµå´Â jsonpath¸¦ »ç¿ëÇÏ´Â ¸Å¿ì º¹ÀâÇÑ º¯È¯¿¡ À¯¿ëÇÏ´Ù. https://stedolan.github.io/jq/ ¿¡¼­ È®ÀÎÇÒ ¼ö ÀÖ´Ù.
+# íŠ¹ì • RCì— ì†í•´ìˆëŠ” íŒŒë“œ ì´ë¦„ì˜ ëª©ë¡ ì¡°íšŒ
+# "jq" ì»¤ë§¨ë“œëŠ” jsonpathë¥¼ ì‚¬ìš©í•˜ëŠ” ë§¤ìš° ë³µì¡í•œ ë³€í™˜ì— ìœ ìš©í•˜ë‹¤. https://stedolan.github.io/jq/ ì—ì„œ í™•ì¸í•  ìˆ˜ ìˆë‹¤.
 sel=${$(kubectl get rc my-rc --output=json | jq -j '.spec.selector | to_entries | .[] | "\(.key)=\(.value),"')%?}
 echo $(kubectl get pods --selector=$sel --output=jsonpath={.items..metadata.name})
 
-# ¸ğµç ÆÄµå(¶Ç´Â ·¹ÀÌºíÀ» Áö¿øÇÏ´Â ´Ù¸¥ Äí¹ö³×Æ¼½º ¿ÀºêÁ§Æ®)ÀÇ ·¹ÀÌºí Á¶È¸
+# ëª¨ë“  íŒŒë“œ(ë˜ëŠ” ë ˆì´ë¸”ì„ ì§€ì›í•˜ëŠ” ë‹¤ë¥¸ ì¿ ë²„ë„¤í‹°ìŠ¤ ì˜¤ë¸Œì íŠ¸)ì˜ ë ˆì´ë¸” ì¡°íšŒ
 kubectl get pods --show-labels
 
-# ¾î¶² ³ëµå°¡ ÁØºñµÆ´ÂÁö È®ÀÎ
+# ì–´ë–¤ ë…¸ë“œê°€ ì¤€ë¹„ëëŠ”ì§€ í™•ì¸
 JSONPATH='{range .items[*]}{@.metadata.name}:{range @.status.conditions[*]}{@.type}={@.status};{end}{end}' \
  && kubectl get nodes -o jsonpath="$JSONPATH" | grep "Ready=True"
 
-# ÆÄµå¿¡ ÀÇÇØ ÇöÀç »ç¿ëµÇ°í ÀÖ´Â ¸ğµç ½ÃÅ©¸´ ¸ñ·Ï Á¶È¸
+# íŒŒë“œì— ì˜í•´ í˜„ì¬ ì‚¬ìš©ë˜ê³  ìˆëŠ” ëª¨ë“  ì‹œí¬ë¦¿ ëª©ë¡ ì¡°íšŒ
 kubectl get pods -o json | jq '.items[].spec.containers[].env[]?.valueFrom.secretKeyRef.name' | grep -v null | sort | uniq
 
-# ¸ğµç ÆÄµåÀÇ ÃÊ±âÈ­ ÄÁÅ×ÀÌ³Ê(initContainer)ÀÇ ÄÁÅ×ÀÌ³ÊID ¸ñ·Ï Á¶È¸
-# ÃÊ±âÈ­ ÄÁÅ×ÀÌ³Ê(initContainer)¸¦ Á¦°ÅÇÏÁö ¾Ê°í Á¤ÁöµÈ ¸ğµç ÄÁÅ×ÀÌ³Ê¸¦ Á¤¸®ÇÒ ¶§ À¯¿ëÇÏ´Ù.
+# ëª¨ë“  íŒŒë“œì˜ ì´ˆê¸°í™” ì»¨í…Œì´ë„ˆ(initContainer)ì˜ ì»¨í…Œì´ë„ˆID ëª©ë¡ ì¡°íšŒ
+# ì´ˆê¸°í™” ì»¨í…Œì´ë„ˆ(initContainer)ë¥¼ ì œê±°í•˜ì§€ ì•Šê³  ì •ì§€ëœ ëª¨ë“  ì»¨í…Œì´ë„ˆë¥¼ ì •ë¦¬í•  ë•Œ ìœ ìš©í•˜ë‹¤.
 kubectl get pods --all-namespaces -o jsonpath='{range .items[*].status.initContainerStatuses[*]}{.containerID}{"\n"}{end}' | cut -d/ -f3
 
-# Å¸ÀÓ½ºÅÆÇÁ·Î Á¤·ÄµÈ ÀÌº¥Æ® ¸ñ·Ï Á¶È¸
+# íƒ€ì„ìŠ¤íƒ¬í”„ë¡œ ì •ë ¬ëœ ì´ë²¤íŠ¸ ëª©ë¡ ì¡°íšŒ
 kubectl get events --sort-by=.metadata.creationTimestamp
 
-# ¸Å´ÏÆä½ºÆ®°¡ Àû¿ëµÈ °æ¿ì Å¬·¯½ºÅÍÀÇ ÇöÀç »óÅÂ¿Í Å¬·¯½ºÅÍÀÇ »óÅÂ¸¦ ºñ±³ÇÑ´Ù.
+# ë§¤ë‹ˆí˜ìŠ¤íŠ¸ê°€ ì ìš©ëœ ê²½ìš° í´ëŸ¬ìŠ¤í„°ì˜ í˜„ì¬ ìƒíƒœì™€ í´ëŸ¬ìŠ¤í„°ì˜ ìƒíƒœë¥¼ ë¹„êµí•œë‹¤.
 kubectl diff -f ./my-manifest.yaml
 
 
-<¸®¼Ò½º »èÁ¦>
-kubectl delete -f ./pod.json                                              # pod.json¿¡ ÁöÁ¤µÈ À¯Çü ¹× ÀÌ¸§À» »ç¿ëÇÏ¿© ÆÄµå »èÁ¦
-kubectl delete pod,service baz foo                                        # "baz", "foo"¿Í µ¿ÀÏÇÑ ÀÌ¸§À» °¡Áø ÆÄµå¿Í ¼­ºñ½º »èÁ¦
-kubectl delete pods,services -l name=myLabel                              # name=myLabel ¶óº§À» °¡Áø ÆÄµå¿Í ¼­ºñ½º »èÁ¦
-kubectl delete pods,services -l name=myLabel --include-uninitialized      # ÃÊ±âÈ­µÇÁö ¾ÊÀº °ÍÀ» Æ÷ÇÔÇÏ¿©, name=myLabel ¶óº§À» °¡Áø ÆÄµå¿Í ¼­ºñ½º »èÁ¦
-kubectl -n my-ns delete pod,svc --all                                      # ÃÊ±âÈ­µÇÁö ¾ÊÀº °ÍÀ» Æ÷ÇÔÇÏ¿©, my-ns ³×ÀÓ½ºÆäÀÌ½º ³» ¸ğµç ÆÄµå¿Í ¼­ºñ½º »èÁ¦
-# awk pattern1 ¶Ç´Â pattern2¿¡ ¸ÅÄªµÇ´Â ¸ğµç ÆÄµå »èÁ¦
+
+kubectl get pods --all-namespaces
+kubectl config set-context --current --namespace=default
+
+<ë¦¬ì†ŒìŠ¤ ì‚­ì œ>
+kubectl delete -f ./pod.json                                              # pod.jsonì— ì§€ì •ëœ ìœ í˜• ë° ì´ë¦„ì„ ì‚¬ìš©í•˜ì—¬ íŒŒë“œ ì‚­ì œ
+kubectl delete pod,service baz foo                                        # "baz", "foo"ì™€ ë™ì¼í•œ ì´ë¦„ì„ ê°€ì§„ íŒŒë“œì™€ ì„œë¹„ìŠ¤ ì‚­ì œ
+kubectl delete pods,services -l name=myLabel                              # name=myLabel ë¼ë²¨ì„ ê°€ì§„ íŒŒë“œì™€ ì„œë¹„ìŠ¤ ì‚­ì œ
+kubectl delete pods,services -l name=myLabel --include-uninitialized      # ì´ˆê¸°í™”ë˜ì§€ ì•Šì€ ê²ƒì„ í¬í•¨í•˜ì—¬, name=myLabel ë¼ë²¨ì„ ê°€ì§„ íŒŒë“œì™€ ì„œë¹„ìŠ¤ ì‚­ì œ
+kubectl -n my-ns delete pod,svc --all                                      # ì´ˆê¸°í™”ë˜ì§€ ì•Šì€ ê²ƒì„ í¬í•¨í•˜ì—¬, my-ns ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ë‚´ ëª¨ë“  íŒŒë“œì™€ ì„œë¹„ìŠ¤ ì‚­ì œ
+# awk pattern1 ë˜ëŠ” pattern2ì— ë§¤ì¹­ë˜ëŠ” ëª¨ë“  íŒŒë“œ ì‚­ì œ
 kubectl get pods  -n mynamespace --no-headers=true | awk '/pattern1|pattern2/{print $1}' | xargs  kubectl delete -n mynamespace pod
 
-<ÀÚÁÖ»ç¿ëÇÏ´Â ¸í·É¾î>
-1) pod »ı¼º
-kubectl¿¡´Â create¿Í appy°¡ ÀÖ´Âµ¥, create -f ·Î ÇÏ¸é ÀÌÈÄ¿¡ apply¸¦ ÅëÇØ ´Ù½Ã ¹İ¿µÇÒ ¼ö ¾ø´Ù. 
-±×·¯³ª Ã³À½ºÎÅÍ apply -f ·Î ÇÏ¸é °è¼Ó applyÇÒ ¼ö ÀÖ´Ù´Â Â÷ÀÌÁ¡ÀÌ ÀÖ´Ù.
+<ìì£¼ì‚¬ìš©í•˜ëŠ” ëª…ë ¹ì–´>
+1) pod ìƒì„±
+kubectlì—ëŠ” createì™€ appyê°€ ìˆëŠ”ë°, create -f ë¡œ í•˜ë©´ ì´í›„ì— applyë¥¼ í†µí•´ ë‹¤ì‹œ ë°˜ì˜í•  ìˆ˜ ì—†ë‹¤. 
+ê·¸ëŸ¬ë‚˜ ì²˜ìŒë¶€í„° apply -f ë¡œ í•˜ë©´ ê³„ì† applyí•  ìˆ˜ ìˆë‹¤ëŠ” ì°¨ì´ì ì´ ìˆë‹¤.
 
 2) kubectl create -f nginx-deployment.yaml
-pod »óÅÂ¸¦ Á¶È¸ÇÑ´Ù.
+pod ìƒíƒœë¥¼ ì¡°íšŒí•œë‹¤.
 
 3) kubectl get pods
 NAME                                READY     STATUS    RESTARTS   AGE
 nginx-deployment-7fc9b7bd96-7nmtx   0/1       Pending   0          6m
 nginx-deployment-7fc9b7bd96-9q6w2   0/1       Pending   0          6m
 
-4) pod »èÁ¦
+4) pod ì‚­ì œ
 $ kubectl delete -f nginx-deployment.yaml
 deployment.extensions "nginx-deployment" deleted
-pod »óÅÂ¸¦ Á¶È¸ÇÑ´Ù.
+pod ìƒíƒœë¥¼ ì¡°íšŒí•œë‹¤.
 
-5) Á¶È¸
+5) ì¡°íšŒ
 $ kubectl get pods
 No resources found.
 
 
-<·Î±×È®ÀÎ>
-kubectl logs my-pod                                 # ÆÄµå ·Î±×(stdout) ´ıÇÁ
-kubectl logs -l name=myLabel                        # nameÀÌ myLabelÀÎ ÆÄµå ·Î±× ´ıÇÁ (stdout)
-kubectl logs my-pod --previous                      # ÄÁÅ×ÀÌ³ÊÀÇ ÀÌÀü ÀÎ½ºÅÏ½º »ı¼º¿¡ ´ëÇÑ ÆÄµå ·Î±×(stdout) ´ıÇÁ
-kubectl logs my-pod -c my-container                 # ÆÄµå ·Î±×(stdout, ¸ÖÆ¼-ÄÁÅ×ÀÌ³Ê °æ¿ì) ´ıÇÁ
-kubectl logs -l name=myLabel -c my-container        # nameÀÌ myLabelÀÎ ÆÄµå ·Î±× ´ıÇÁ (stdout)
-kubectl logs my-pod -c my-container --previous      # ÄÁÅ×ÀÌ³ÊÀÇ ÀÌÀü ÀÎ½ºÅÏ½º »ı¼º¿¡ ´ëÇÑ ÆÄµå ·Î±×(stdout, ¸ÖÆ¼-ÄÁÅ×ÀÌ³Ê °æ¿ì) ´ıÇÁ
-kubectl logs -f my-pod                              # ½Ç½Ã°£ ½ºÆ®¸² ÆÄµå ·Î±×(stdout)
-kubectl logs -f my-pod -c my-container              # ½Ç½Ã°£ ½ºÆ®¸² ÆÄµå ·Î±×(stdout, ¸ÖÆ¼-ÄÁÅ×ÀÌ³Ê °æ¿ì)
-kubectl logs -f -l name=myLabel --all-containers    # nameÀÌ myLabelÀÎ ¸ğµç ÆÄµåÀÇ ·Î±× ½ºÆ®¸®¹Ö (stdout)
-kubectl run -i --tty busybox --image=busybox -- sh  # ´ëÈ­Çü ¼Ğ·Î ÆÄµå¸¦ ½ÇÇà
+<ë¡œê·¸í™•ì¸>
+kubectl logs my-pod                                 # íŒŒë“œ ë¡œê·¸(stdout) ë¤í”„
+kubectl logs -l name=myLabel                        # nameì´ myLabelì¸ íŒŒë“œ ë¡œê·¸ ë¤í”„ (stdout)
+kubectl logs my-pod --previous                      # ì»¨í…Œì´ë„ˆì˜ ì´ì „ ì¸ìŠ¤í„´ìŠ¤ ìƒì„±ì— ëŒ€í•œ íŒŒë“œ ë¡œê·¸(stdout) ë¤í”„
+kubectl logs my-pod -c my-container                 # íŒŒë“œ ë¡œê·¸(stdout, ë©€í‹°-ì»¨í…Œì´ë„ˆ ê²½ìš°) ë¤í”„
+kubectl logs -l name=myLabel -c my-container        # nameì´ myLabelì¸ íŒŒë“œ ë¡œê·¸ ë¤í”„ (stdout)
+kubectl logs my-pod -c my-container --previous      # ì»¨í…Œì´ë„ˆì˜ ì´ì „ ì¸ìŠ¤í„´ìŠ¤ ìƒì„±ì— ëŒ€í•œ íŒŒë“œ ë¡œê·¸(stdout, ë©€í‹°-ì»¨í…Œì´ë„ˆ ê²½ìš°) ë¤í”„
+kubectl logs -f my-pod                              # ì‹¤ì‹œê°„ ìŠ¤íŠ¸ë¦¼ íŒŒë“œ ë¡œê·¸(stdout)
+kubectl logs -f my-pod -c my-container              # ì‹¤ì‹œê°„ ìŠ¤íŠ¸ë¦¼ íŒŒë“œ ë¡œê·¸(stdout, ë©€í‹°-ì»¨í…Œì´ë„ˆ ê²½ìš°)
+kubectl logs -f -l name=myLabel --all-containers    # nameì´ myLabelì¸ ëª¨ë“  íŒŒë“œì˜ ë¡œê·¸ ìŠ¤íŠ¸ë¦¬ë° (stdout)
+kubectl run -i --tty busybox --image=busybox -- sh  # ëŒ€í™”í˜• ì…¸ë¡œ íŒŒë“œë¥¼ ì‹¤í–‰
 kubectl run nginx --image=nginx -n
-mynamespace                                         # Æ¯Á¤ ³×ÀÓ½ºÆäÀÌ½º¿¡¼­ nginx ÆÄµå ½ÇÇà
-kubectl run nginx --image=nginx                     # nginx ÆÄµå¸¦ ½ÇÇàÇÏ°í ÇØ´ç ½ºÆåÀ» pod.yaml ÆÄÀÏ¿¡ ±â·Ï
+mynamespace                                         # íŠ¹ì • ë„¤ì„ìŠ¤í˜ì´ìŠ¤ì—ì„œ nginx íŒŒë“œ ì‹¤í–‰
+kubectl run nginx --image=nginx                     # nginx íŒŒë“œë¥¼ ì‹¤í–‰í•˜ê³  í•´ë‹¹ ìŠ¤í™ì„ pod.yaml íŒŒì¼ì— ê¸°ë¡
 --dry-run=client -o yaml > pod.yaml
 
-kubectl attach my-pod -i                            # ½ÇÇàÁßÀÎ ÄÁÅ×ÀÌ³Ê¿¡ ¿¬°á
-kubectl port-forward my-pod 5000:6000               # ·ÎÄÃ ¸Ó½ÅÀÇ 5000¹ø Æ÷Æ®¸¦ ¸®½º´×ÇÏ°í, my-podÀÇ 6000¹ø Æ÷Æ®·Î Àü´Ş
-kubectl exec my-pod -- ls /                         # ±âÁ¸ ÆÄµå¿¡¼­ ¸í·É ½ÇÇà(ÇÑ °³ ÄÁÅ×ÀÌ³Ê °æ¿ì)
-kubectl exec my-pod -c my-container -- ls /         # ±âÁ¸ ÆÄµå¿¡¼­ ¸í·É ½ÇÇà(¸ÖÆ¼-ÄÁÅ×ÀÌ³Ê °æ¿ì)
-kubectl top pod POD_NAME --containers               # Æ¯Á¤ ÆÄµå¿Í ÇØ´ç ÄÁÅ×ÀÌ³Ê¿¡ ´ëÇÑ ¸ŞÆ®¸¯ Ç¥½Ã
+kubectl attach my-pod -i                            # ì‹¤í–‰ì¤‘ì¸ ì»¨í…Œì´ë„ˆì— ì—°ê²°
+kubectl port-forward my-pod 5000:6000               # ë¡œì»¬ ë¨¸ì‹ ì˜ 5000ë²ˆ í¬íŠ¸ë¥¼ ë¦¬ìŠ¤ë‹í•˜ê³ , my-podì˜ 6000ë²ˆ í¬íŠ¸ë¡œ ì „ë‹¬
+kubectl exec my-pod -- ls /                         # ê¸°ì¡´ íŒŒë“œì—ì„œ ëª…ë ¹ ì‹¤í–‰(í•œ ê°œ ì»¨í…Œì´ë„ˆ ê²½ìš°)
+kubectl exec my-pod -c my-container -- ls /         # ê¸°ì¡´ íŒŒë“œì—ì„œ ëª…ë ¹ ì‹¤í–‰(ë©€í‹°-ì»¨í…Œì´ë„ˆ ê²½ìš°)
+kubectl top pod POD_NAME --containers               # íŠ¹ì • íŒŒë“œì™€ í•´ë‹¹ ì»¨í…Œì´ë„ˆì— ëŒ€í•œ ë©”íŠ¸ë¦­ í‘œì‹œ
 
 
-<cluster È®ÀÎ>
-kubectl cordon my-node                                                # my-node¸¦ ½ºÄÉÁÙ¸µÇÒ ¼ö ¾øµµ·Ï Ç¥±â
-kubectl drain my-node                                                 # À¯Áö º¸¼ö¸¦ À§ÇØ¼­ my-node¸¦ ÁØºñ »óÅÂ·Î ºñ¿ò
-kubectl uncordon my-node                                              # my-node¸¦ ½ºÄÉÁÙ¸µÇÒ ¼ö ÀÖµµ·Ï Ç¥±â
-kubectl top node my-node                                              # ÁÖ¾îÁø ³ëµå¿¡ ´ëÇÑ ¸ŞÆ®¸¯ Ç¥½Ã
-kubectl cluster-info                                                  # ¸¶½ºÅÍ ¹× ¼­ºñ½ºÀÇ ÁÖ¼Ò Ç¥½Ã
-kubectl cluster-info dump                                             # ÇöÀç Å¬·¯½ºÅÍ »óÅÂ¸¦ stdoutÀ¸·Î ´ıÇÁ
-kubectl cluster-info dump --output-directory=/path/to/cluster-state   # ÇöÀç Å¬·¯½ºÅÍ »óÅÂ¸¦ /path/to/cluster-stateÀ¸·Î ´ıÇÁ
+<cluster í™•ì¸>
+kubectl cordon my-node                                                # my-nodeë¥¼ ìŠ¤ì¼€ì¤„ë§í•  ìˆ˜ ì—†ë„ë¡ í‘œê¸°
+kubectl drain my-node                                                 # ìœ ì§€ ë³´ìˆ˜ë¥¼ ìœ„í•´ì„œ my-nodeë¥¼ ì¤€ë¹„ ìƒíƒœë¡œ ë¹„ì›€
+kubectl uncordon my-node                                              # my-nodeë¥¼ ìŠ¤ì¼€ì¤„ë§í•  ìˆ˜ ìˆë„ë¡ í‘œê¸°
+kubectl top node my-node                                              # ì£¼ì–´ì§„ ë…¸ë“œì— ëŒ€í•œ ë©”íŠ¸ë¦­ í‘œì‹œ
+kubectl cluster-info                                                  # ë§ˆìŠ¤í„° ë° ì„œë¹„ìŠ¤ì˜ ì£¼ì†Œ í‘œì‹œ
+kubectl cluster-info dump                                             # í˜„ì¬ í´ëŸ¬ìŠ¤í„° ìƒíƒœë¥¼ stdoutìœ¼ë¡œ ë¤í”„
+kubectl cluster-info dump --output-directory=/path/to/cluster-state   # í˜„ì¬ í´ëŸ¬ìŠ¤í„° ìƒíƒœë¥¼ /path/to/cluster-stateìœ¼ë¡œ ë¤í”„
 
-# key¿Í effect°¡ ÀÖ´Â Å×ÀÎÆ®(taint)°¡ ÀÌ¹Ì Á¸ÀçÇÏ¸é, ±× °ªÀÌ ÁöÁ¤µÈ ´ë·Î ´ëÃ¼µÈ´Ù.
+# keyì™€ effectê°€ ìˆëŠ” í…Œì¸íŠ¸(taint)ê°€ ì´ë¯¸ ì¡´ì¬í•˜ë©´, ê·¸ ê°’ì´ ì§€ì •ëœ ëŒ€ë¡œ ëŒ€ì²´ëœë‹¤.
 kubectl taint nodes foo dedicated=special-user:NoSchedule
 
-¸®¼Ò½º Å¸ÀÔ È®ÀÎ ÇÏ±â
+ë¦¬ì†ŒìŠ¤ íƒ€ì… í™•ì¸ í•˜ê¸°
 #kubectl api-resources
-kubectl api-resources --namespaced=true      # ³×ÀÓ½ºÆäÀÌ½º¸¦ °¡Áö´Â ¸ğµç ¸®¼Ò½º
-kubectl api-resources --namespaced=false     # ³×ÀÓ½ºÆäÀÌ½º¸¦ °¡ÁöÁö ¾Ê´Â ¸ğµç ¸®¼Ò½º
-kubectl api-resources -o name                # ¸ğµç ¸®¼Ò½ºÀÇ ´Ü¼øÇÑ (¸®¼Ò½º ÀÌ¸§ ¸¸) Ãâ·Â
-kubectl api-resources -o wide                # ¸ğµç ¸®¼Ò½ºÀÇ È®ÀåµÈ ("wide"·Î ¾Ë·ÁÁø) Ãâ·Â
-kubectl api-resources --verbs=list,get       # "list"¿Í "get"ÀÇ ¿äÃ» µ¿»ç¸¦ Áö¿øÇÏ´Â ¸ğµç ¸®¼Ò½º Ãâ·Â
-kubectl api-resources --api-group=extensions # "extensions" API ±×·ìÀÇ ¸ğµç ¸®¼Ò½º
+kubectl api-resources --namespaced=true      # ë„¤ì„ìŠ¤í˜ì´ìŠ¤ë¥¼ ê°€ì§€ëŠ” ëª¨ë“  ë¦¬ì†ŒìŠ¤
+kubectl api-resources --namespaced=false     # ë„¤ì„ìŠ¤í˜ì´ìŠ¤ë¥¼ ê°€ì§€ì§€ ì•ŠëŠ” ëª¨ë“  ë¦¬ì†ŒìŠ¤
+kubectl api-resources -o name                # ëª¨ë“  ë¦¬ì†ŒìŠ¤ì˜ ë‹¨ìˆœí•œ (ë¦¬ì†ŒìŠ¤ ì´ë¦„ ë§Œ) ì¶œë ¥
+kubectl api-resources -o wide                # ëª¨ë“  ë¦¬ì†ŒìŠ¤ì˜ í™•ì¥ëœ ("wide"ë¡œ ì•Œë ¤ì§„) ì¶œë ¥
+kubectl api-resources --verbs=list,get       # "list"ì™€ "get"ì˜ ìš”ì²­ ë™ì‚¬ë¥¼ ì§€ì›í•˜ëŠ” ëª¨ë“  ë¦¬ì†ŒìŠ¤ ì¶œë ¥
+kubectl api-resources --api-group=extensions # "extensions" API ê·¸ë£¹ì˜ ëª¨ë“  ë¦¬ì†ŒìŠ¤
 
-ÀÌ¹ÌÁö È®ÀÎ
-# Å¬·¯½ºÅÍ¿¡¼­ ½ÇÇà ÁßÀÎ ¸ğµç ÀÌ¹ÌÁö
+ì´ë¯¸ì§€ í™•ì¸
+# í´ëŸ¬ìŠ¤í„°ì—ì„œ ì‹¤í–‰ ì¤‘ì¸ ëª¨ë“  ì´ë¯¸ì§€
 kubectl get pods -A -o=custom-columns='DATA:spec.containers[*].image'
 
- # "k8s.gcr.io/coredns:1.6.2" ¸¦ Á¦¿ÜÇÑ ¸ğµç ÀÌ¹ÌÁö
+ # "k8s.gcr.io/coredns:1.6.2" ë¥¼ ì œì™¸í•œ ëª¨ë“  ì´ë¯¸ì§€
 kubectl get pods -A -o=custom-columns='DATA:spec.containers[?(@.image!="k8s.gcr.io/coredns:1.6.2")].image'
 
-# ÀÌ¸§¿¡ °ü°è¾øÀÌ ¸ŞÅ¸µ¥ÀÌÅÍ ¾Æ·¡ÀÇ ¸ğµç ÇÊµå
+# ì´ë¦„ì— ê´€ê³„ì—†ì´ ë©”íƒ€ë°ì´í„° ì•„ë˜ì˜ ëª¨ë“  í•„ë“œ
 kubectl get pods -A -o=custom-columns='DATA:metadata.*'
 
 
---v=0	ÀÏ¹İÀûÀ¸·Î Å¬·¯½ºÅÍ ¿î¿µÀÚ(operator)¿¡°Ô Ç×»ó º¸¿©Áö°Ô ÇÏ±â¿¡´Â À¯¿ëÇÔ.
---v=1	ÀÚ¼¼ÇÑ Á¤º¸¸¦ ¿øÇÏÁö ¾Ê´Â °æ¿ì, ÀûÀıÇÑ ±âº» ·Î±× ¼öÁØ.
---v=2	 ½Ã½ºÅÛ¿¡¼­ ±ÇÀåµÇ´Â ±âº» ·Î±× ¼öÁØÀÌ´Ù.	
---v=3	º¯°æ »çÇ×¿¡ ´ëÇÑ È®Àå Á¤º¸.	
---v=4	µğ¹ö±× ¼öÁØ »ó¼¼È­.	
---v=6	¿äÃ»ÇÑ ¸®¼Ò½º¸¦ Ç¥½Ã.	
---v=7	HTTP ¿äÃ» Çì´õ¸¦ Ç¥½Ã.	
---v=8	HTTP ¿äÃ» ³»¿ëÀ» Ç¥½Ã.	
---v=9	³»¿ëÀ» Àß¶ó ³»Áö ¾Ê°í HTTP ¿äÃ» ³»¿ëÀ» Ç¥½Ã.
+--v=0	ì¼ë°˜ì ìœ¼ë¡œ í´ëŸ¬ìŠ¤í„° ìš´ì˜ì(operator)ì—ê²Œ í•­ìƒ ë³´ì—¬ì§€ê²Œ í•˜ê¸°ì—ëŠ” ìœ ìš©í•¨.
+--v=1	ìì„¸í•œ ì •ë³´ë¥¼ ì›í•˜ì§€ ì•ŠëŠ” ê²½ìš°, ì ì ˆí•œ ê¸°ë³¸ ë¡œê·¸ ìˆ˜ì¤€.
+--v=2	 ì‹œìŠ¤í…œì—ì„œ ê¶Œì¥ë˜ëŠ” ê¸°ë³¸ ë¡œê·¸ ìˆ˜ì¤€ì´ë‹¤.	
+--v=3	ë³€ê²½ ì‚¬í•­ì— ëŒ€í•œ í™•ì¥ ì •ë³´.	
+--v=4	ë””ë²„ê·¸ ìˆ˜ì¤€ ìƒì„¸í™”.	
+--v=6	ìš”ì²­í•œ ë¦¬ì†ŒìŠ¤ë¥¼ í‘œì‹œ.	
+--v=7	HTTP ìš”ì²­ í—¤ë”ë¥¼ í‘œì‹œ.	
+--v=8	HTTP ìš”ì²­ ë‚´ìš©ì„ í‘œì‹œ.	
+--v=9	ë‚´ìš©ì„ ì˜ë¼ ë‚´ì§€ ì•Šê³  HTTP ìš”ì²­ ë‚´ìš©ì„ í‘œì‹œ.
+
+<kube join hash>
+ohcuis.t94jnvrfpsgutjjy
 
 
+Masternode Join ì‹œ í•„ìš” 3ê°€ì§€
+token ê°’, hash ê°’, ë§ˆìŠ¤í„° ë…¸ë“œ ì£¼ì†Œ
+
+1. token
+- ohcuis.t94jnvrfpsgutjjy
+2. hash
+- e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+3. ë§ˆìŠ¤í„° ë…¸ë“œ ì£¼ì†Œ
+- 192.168.65.4
+
+
+<admin ê¶Œí•œ ìƒì„±>
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: admin
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: admin-all-cluster
+sub:jects:
+- kind: ServiceAccount
+  name: admin
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: cluster-admin
+  apiGroup: rbac.authorization.k8s.io
