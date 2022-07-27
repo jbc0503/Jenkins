@@ -1,3 +1,12 @@
+docker pull gocd/gocd-server:v18.10.0
+docker run -d --name gocd-server -p8153:8153 -p8154:8154 gocd/gocd-server:v18.10.0
+docker pull gocd/gocd-agent-alpine-3.8:v18.10.0
+docker run -itd --name gocd-agent -e CI=true -e GO_SERVER_URL=https://$(docker inspect --format='{{(index (index .NetworkSettings.IPAddress))}}' gocd-server):8154/go gocd/gocd-agent-alpine-3.8:v18.10.0
+
+
+
+
+
 docker pull gocd/gocd-server:v22.1.0
 
 docker run -d -p 8153:8153 gocd/gocd-server:v22.1.0
@@ -5,3 +14,36 @@ docker run -d -p 8153:8153 gocd/gocd-server:v22.1.0
 docker pull gocd/gocd-agent-ubuntu-16.04:v17.3.0
 
 docker run gocd/gocd-agent-ubuntu-16.04:v17.3.0
+
+client Java 설치
+# apt-get update
+# apt-get install net-tools
+# apt-get install vim
+# apt-get install iputils-ping
+# apt-get install wget
+/downloads 에 JDK Down
+#wget --header "Cookie:oraclelicense=accept\
+>  securebackup-cookie" [복사한 링크주소]
+>
+
+아래 사이트에서 링크 복사해옴
+https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html
+
+압축해제
+# tar xvfz [파일명]
+압축해제 폴더로 이동
+# ln -s jdk-18.0.1.1/ java
+환경설정
+#vi ~/.bashrc
+export JAVA_HOME=~/java
+export PATH=$PATH:$JAVA_HOME/bin
+
+#source ~/.bashrc
+
+JAVA_HOME, JRE_HOME 설정
+# readlink -f $(which java)
+
+# echo "export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64" >> ~/.bash_profile
+# echo "export JRE_HOME=/usr/lib/jvm/java-8-openjdk-amd64/jre" >> ~/.bash_profile
+# source ~/.bash_profile
+# . ~/.bash_profile
